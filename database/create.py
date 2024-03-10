@@ -83,6 +83,5 @@ def create_table( name, fields):
 
     operation = "CREATE TABLE IF NOT EXISTS {} ({})".format(name, fields)
     crsr = mydb.cursor()
-    print(name)
     crsr.execute(operation)
     mydb.commit()
