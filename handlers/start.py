@@ -32,7 +32,7 @@ async def home(update, context):
     chat_id = update.effective_chat.id
 
     reply_keyboard = [
-        [InlineKeyboardButton(text="What's in Cafe", callback_data="launch_mini_app"),],
+        [InlineKeyboardButton(text="What's in Cafe?", callback_data="launch_mini_app"),],
         [InlineKeyboardButton(text="View Account Details", callback_data="view_account_details"),],
         [InlineKeyboardButton(text="View Order History", callback_data="view_order_history"),],
     ]
