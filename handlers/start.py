@@ -8,6 +8,8 @@ from database.queries import (
 )
 from database.models import User
 
+from extras.keyboards import HOME_KEYBOARD
+
 async def start(update:Update, context:ContextTypes.DEFAULT_TYPE):
     if is_user(update.effective_user.id):
         await home(update, context)
@@ -31,13 +33,8 @@ def build_keyboard(current_list) -> InlineKeyboardMarkup:
 async def home(update, context):
     chat_id = update.effective_chat.id
 
-    reply_keyboard = [
-        [InlineKeyboardButton(text="What's in Cafe?", callback_data="launch_mini_app"),],
-        [InlineKeyboardButton(text="View Account Details", callback_data="view_account_details"),],
-        [InlineKeyboardButton(text="View Order History", callback_data="view_order_history"),],
-    ]
 
-    markup = InlineKeyboardMarkup(reply_keyboard)
+    markup = InlineKeyboardMarkup(HOME_KEYBOARD)
     await context.bot.send_message(
         chat_id=chat_id,
         text="Welcome to ByteNCrunch",
