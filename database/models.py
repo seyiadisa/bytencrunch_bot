@@ -53,7 +53,10 @@ class Product:
     price = None
     type = None
     sides = None
-
+    
+    def __init__(self, my_vals:list) -> None:
+        self.my_id, self.name, self.vendorID, self.price, self.type, self.sides = my_vals
+        
     def __str__(self) -> str:
         return f"Product(id={self.my_id}, name={self.name}, vendorID = {self.vendorID}, price={self.price}, type={self.type}, sides={self.sides})"
     
@@ -70,9 +73,9 @@ class Order:
     hall = None
     room = None
     reference = None #left as none till flutter payment time
-    def __init__(self, my_dic: dict) -> None:
-        self.my_id, self.customer_id, self.ammount_paid, self.payment_status, self.status, self.hall, self.room, self.reference = my_dic.values()
-    def __str__(self) -> str:
+    def __init__(self, my_vals:list) -> None:
+        self.my_id, self.customer_id, self.ammount_paid, self.payment_status, self.status, self.hall, self.room, self.reference = my_vals
+    def _str__(self) -> str:
         return f"Order(id={self.my_id}, customer_id ={self.customer_id}, customer_name={self.customer_name}, ammount_paid={self.ammount_paid}, payment_status={self.payment_status}, status={self.status}, hall={self.hall}, room={self.room}, reference={self.reference})"
     
     
@@ -85,6 +88,8 @@ class OrderItem:
     item_count = None
     subtotal = None
 
+    def __init__(self, my_vals:list) -> None:
+        self.my_id, self.product_id, self.order_id,self.item_count, self.subtotal = my_vals
     def __str__(self) -> str:
         return f"OrderItem(id={self.my_id}, product_id={self.product_id}, order_id={self.order_id}, item_count={self.item_count}, subtotal={self.subtotal})"
     
