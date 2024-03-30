@@ -1,6 +1,11 @@
 from telegram import (
-    InlineKeyboardButton
+    InlineKeyboardButton,
+    InlineKeyboardMarkup
 )
+
+CANCEL_KEYBOARD =[
+    [InlineKeyboardButton(text="Cancel", callback_data="cancel")]
+]
 
 HOME_KEYBOARD =  [
     [InlineKeyboardButton(text="What's in Cafe?", callback_data="launch_mini_app"),],
@@ -28,10 +33,20 @@ HALL_KEYBOARD = [
     [
         InlineKeyboardButton(text="Daniel Hall", callback_data="Daniel Hall"),
         InlineKeyboardButton(text="Dorcas Hall", callback_data="Dorcas Hall"),
-    ]
+    ],
+    # CANCEL_KEYBOARD
 ]
 
 CONFIRM_USER_INPUT_KEYBOARD = [
     [InlineKeyboardButton(text="Save", callback_data="save"),],
-    [InlineKeyboardButton(text="Re-enter Details", callback_data="reenter_details"),]
+    [InlineKeyboardButton(text="Re-enter Details", callback_data="reenter_details"),],
+    # CANCEL_KEYBOARD
 ]
+
+UPDATE_USER_PROFILE_KEYBOARD = [
+    [InlineKeyboardButton(text="Save", callback_data="save"),],
+    CANCEL_KEYBOARD
+]
+
+def form_keyboard(kybd_btn):
+    return InlineKeyboardMarkup(kybd_btn)
