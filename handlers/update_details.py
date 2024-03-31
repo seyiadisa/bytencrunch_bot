@@ -6,7 +6,7 @@ from telegram.ext import (
     CommandHandler,
     filters
 )
-from .account_creation import home
+
 from database.manipulate import update_user_data
 from extras.keyboards import (
     form_keyboard,
@@ -17,6 +17,9 @@ from extras.keyboards import (
 )
 from extras.helper_functions import get_user_profile
 from extras.my_lists import UPDATE_COMMAND_LIST
+
+from .account_creation import home
+
 HALL,OTHERS,DONE, RE_ENTER=range(1,5)
 
 async def update_details_init(update, context):
@@ -35,21 +38,17 @@ async def update_details_init(update, context):
 async def update_details(update, context):
     chat_id = update.effective_chat.id
 
+    
+
     await context.bot.delete_message(
         chat_id=chat_id,
         message_id=update.message.message_id
     )
-
-    try:
-        query_data = update.message.text[13:]
-        context.user_data["update"] = query_data 
-    except:
-        pass
+    query_data = update.message.text[13:]
+    context.user_data["update"] = query_data 
 
     query_data = context.user_data["update"]
     match query_data:
-        case "all_details":
-            pass
         case "hall":
             await context.bot.edit_message_text(
                 chat_id=chat_id,
@@ -75,8 +74,6 @@ async def process_selection(update, context):
     match selection:
         case "hall":
             user_input = update.callback_query.data
-        case "all_details":
-            pass
         case _:
             user_input = update.message.text
             await context.bot.delete_message(
@@ -119,21 +116,47 @@ async def save_changes(update, context):
                         reply_markup = form_keyboard(CONFIRM_USER_INPUT_KEYBOARD)
                 )
                 sleep(1)
-            
-            await home(update, context)
+            await context.bot.edit_message_text(
+                chat_id=chat_id,
+                message_id = context.user_data["prev_message"],
+                text="Welcome to ByteNCrunch",
+                reply_markup = form_keyboard(HOME_KEYBOARD)
+            )
+            return -1
         case "reenter_details":
-            for i in range(0,4):
-                await context.bot.edit_message_text(
-                        chat_id=chat_id,
-                        message_id = context.user_data["prev_message"],
-                        text=f"Redirecting in...{3-i}",
-                        reply_markup = form_keyboard(CONFIRM_USER_INPUT_KEYBOARD)
-                )
-                sleep(1)
+            # for i in range(0,4):
+            #     await context.bot.edit_message_text(
+            #             chat_id=chat_id,
+            #             message_id = context.user_data["prev_message"],
+            #             text=f"Redirecting in...{3-i}",
+            #             reply_markup = form_keyboard(CONFIRM_USER_INPUT_KEYBOARD)
+            #     )
+            #     sleep(1)
 
-            await update_details(update, context)
+            return RE_ENTER
 
 
+async def re_enter_details(update, context):
+    chat_id = update.effective_chat.id 
+
+    query_data = context.user_data["update"]
+    match query_data:
+        case "hall":
+            await context.bot.edit_message_text(
+                chat_id=chat_id,
+                message_id = context.user_data["prev_message"],
+                text="What hall are you in?\n(You can always change this later)",
+                reply_markup=form_keyboard(HALL_KEYBOARD)
+            )
+            return HALL
+        case _:
+            await context.bot.edit_message_text(
+                chat_id=chat_id,
+                message_id = context.user_data["prev_message"],
+                text=f"Enter new {query_data}:",
+                reply_markup = form_keyboard(CANCEL_KEYBOARD)
+            )
+            return OTHERS
 
 
 
@@ -144,7 +167,7 @@ update_details_handler = ConversationHandler(
         HALL:[CallbackQueryHandler(process_selection)],
         OTHERS:[MessageHandler(filters.TEXT & ~filters.COMMAND, process_selection)],
         DONE: [CallbackQueryHandler(save_changes)],
-        # RE_ENTER:[CallbackQueryHandler]
+        RE_ENTER:[CallbackQueryHandler(re_enter_details)]
     },
     fallbacks=[]
 )
