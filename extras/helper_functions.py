@@ -77,13 +77,14 @@ def get_user_profile(user_id):
                     Matric_Number => {user_data[2]}
                     **You can't change your matric number**
                     Email => {user_data[3]}
-                    /update_user_email
+                    **You can't change your matric number or email**
                     Hall => {user_data[4]}
                     /update_user_hall
                     Room => {user_data[5]}
                     /update_user_room
                     """
     # """
+    #                 /update_user_email
     #                 To re-enter all you details,
     #                 /update_user_all_details
     #                 """
