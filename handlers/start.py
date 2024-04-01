@@ -35,10 +35,11 @@ async def home(update, context):
 
 
     markup = InlineKeyboardMarkup(HOME_KEYBOARD)
-    await context.bot.send_message(
+    message = await context.bot.send_message(
         chat_id=chat_id,
         text="Welcome to ByteNCrunch",
         reply_markup = markup
     ) 
+    context.user_data["prev_message"] = message.message_id
 
 start_handler = CommandHandler("start",start)

@@ -4,9 +4,6 @@ from telegram.ext import (
     MessageHandler,
     filters
 )
-from telegram import (
-    InlineKeyboardMarkup
-)
 
 
 from extras.user_validators import (
@@ -16,8 +13,10 @@ from extras.user_validators import (
 )
 
 from extras.keyboards import (
+    form_keyboard,
     HOME_KEYBOARD,
     HALL_KEYBOARD,
+    CANCEL_KEYBOARD,
     CONFIRM_USER_INPUT_KEYBOARD
 )
 
@@ -29,6 +28,7 @@ async def create_account(update, context):
         chat_id=chat_id,
         message_id = context.user_data["prev_message"],
         text="Let's start setting up your account!\nWhat's your name?\n**This is what our dispatchers will yell when searching for you😗**",
+        reply_markup = form_keyboard(CANCEL_KEYBOARD)
     )
 
     return NAME 
@@ -48,6 +48,7 @@ async def enter_matno(update, context):
         chat_id=chat_id,
         message_id = context.user_data["prev_message"],
         text="Okay, next up is your matric number\n~Please be good and enter it correctly~",
+        reply_markup = form_keyboard(CANCEL_KEYBOARD)
     )
 
     context.user_data["user"] = user
@@ -70,7 +71,9 @@ async def enter_email(update, context):
             await context.bot.edit_message_text(
                 chat_id=chat_id,
                 message_id = context.user_data["prev_message"],
-                text="Now we need you email!\nPlease make sure to use your Covenant University email!"
+                text="Now we need you email!\nPlease make sure to use your Covenant University email!",
+                reply_markup = form_keyboard(CANCEL_KEYBOARD)
+                
             )
 
             context.user_data["user"] = user
@@ -92,12 +95,11 @@ async def select_hostel(update, context):
 
     match check_email(user.email):
         case True:
-            markup = InlineKeyboardMarkup(HALL_KEYBOARD)
             await context.bot.edit_message_text(
                 chat_id=chat_id,
                 message_id = context.user_data["prev_message"],
                 text="What hall are you in?\n(You can always change this later)",
-                reply_markup=markup
+                reply_markup=form_keyboard(HALL_KEYBOARD)
             )
             
             context.user_data["user"] = user
@@ -116,7 +118,8 @@ async def enter_room(update, context):
     await context.bot.edit_message_text(
         chat_id=chat_id,
         message_id = context.user_data["prev_message"],
-        text="Lastly we need your room number"
+        text="Lastly we need your room number",
+        reply_mark=form_keyboard(CANCEL_KEYBOARD)
     )
     
     context.user_data["user"] = user
@@ -146,13 +149,12 @@ async def confirm_details(update, context):
             \nPlease make sure that it's all correct
             '''
 
-            markup = InlineKeyboardMarkup(CONFIRM_USER_INPUT_KEYBOARD)
             
             await context.bot.edit_message_text(
                 chat_id=chat_id,
                 message_id = context.user_data["prev_message"],
                 text=text_to_send,
-                reply_markup = markup
+                reply_markup = form_keyboard(CONFIRM_USER_INPUT_KEYBOARD)
             )
 
             return CONFIRM
@@ -184,7 +186,8 @@ async def redo_mat_no(update, context, matno):
     await context.bot.edit_message_text(
                 chat_id=chat_id,
                 message_id = context.user_data["prev_message"],
-                text=text
+                text=text,
+                reply_markup = form_keyboard(CANCEL_KEYBOARD)
             )
     return MATNO
 
@@ -200,7 +203,8 @@ async def redo_email(update, context, email):
     await context.bot.edit_message_text(
                 chat_id=chat_id,
                 message_id = context.user_data["prev_message"],
-                text=text
+                text=text,
+                reply_markup = form_keyboard(CANCEL_KEYBOARD)
             )
     return EMAIL
 
@@ -216,7 +220,8 @@ async def redo_room(update, context, room):
     await context.bot.edit_message_text(
                 chat_id=chat_id,
                 message_id = context.user_data["prev_message"],
-                text=text
+                text=text,
+                reply_markup = form_keyboard(CANCEL_KEYBOARD)
             )
     return ROOM
 
@@ -224,14 +229,13 @@ async def redo_room(update, context, room):
 async def home(update, context):
     chat_id = update.effective_chat.id
 
-    markup = InlineKeyboardMarkup(HOME_KEYBOARD)
     await context.bot.edit_message_text(
         chat_id=chat_id,
         message_id = context.user_data["prev_message"],
         text="Welcome to ByteNCrunch",
-        reply_markup = markup
+        reply_markup = form_keyboard(HOME_KEYBOARD)
     )
-    return ConversationHandler.END
+    return -1
 
 
 create_account_handler = ConversationHandler(
