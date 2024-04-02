@@ -9,5 +9,5 @@ def check_room(room):
     return bool(re.fullmatch(pattern, room))
 
 def check_email(email):
-    pattern = r"\w+\.\w+\@stu\.cu\.edu\.ng"
+    pattern = r"[^@]+\.[^@]+\@stu\.cu\.edu\.ng"
     return bool(re.fullmatch(pattern, email))
