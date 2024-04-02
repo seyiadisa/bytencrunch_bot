@@ -2,7 +2,11 @@ import os
 from datetime import datetime as dt
 import mysql.connector as connector
 from dotenv import load_dotenv
-from .models import Order
+from .models import (
+    Order,
+    OrderItem,
+    Product
+)
 
 load_dotenv()
 
@@ -114,7 +118,7 @@ def get_product(product_id):
     result = crsr.fetchall()[0]
     mydb.close()
 
-    return result
+    return Product(result)
 
 def get_all_products() -> list:
     mydb = connector.connect(
@@ -197,4 +201,20 @@ def get_all_order_items():
 
     result = crsr.fetchall()
     mycon.close()
+    return result
+
+def get_items_from_order(order):
+    mycon = connector.connect(
+    host=os.environ["DB_HOST"],
+    user=os.environ["DB_USER"],
+    password=os.environ["DB_PASSWORD"],
+    database=os.environ["DATABASE"]
+    )
+    crsr = mycon.cursor()
+    crsr.execute(
+        "SELECT * FROM order_item where order_id=%s",
+        (order.my_id,)
+    )
+    result = [ OrderItem(i) for i in crsr.fetchall()]
+
     return result
