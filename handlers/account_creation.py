@@ -119,7 +119,7 @@ async def enter_room(update, context):
         chat_id=chat_id,
         message_id = context.user_data["prev_message"],
         text="Lastly we need your room number",
-        reply_mark=form_keyboard(CANCEL_KEYBOARD)
+        reply_markup=form_keyboard(CANCEL_KEYBOARD)
     )
     
     context.user_data["user"] = user

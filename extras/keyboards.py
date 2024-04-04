@@ -48,5 +48,10 @@ UPDATE_USER_PROFILE_KEYBOARD = [
     CANCEL_KEYBOARD
 ]
 
+PAYMENT_OPTION_KEYBOARD = [
+    [InlineKeyboardButton(text="pay via flutterwave", callback_data="flutter")],
+    [InlineKeyboardButton(text="direct transfer", callback_data="direct")]
+]
+
 def form_keyboard(kybd_btn):
     return InlineKeyboardMarkup(kybd_btn)
