@@ -7,6 +7,7 @@ from .models import (
     OrderItem,
     Product
 )
+import config
 
 load_dotenv()
 
@@ -217,4 +218,40 @@ def get_items_from_order(order):
     )
     result = [ OrderItem(i) for i in crsr.fetchall()]
 
+    return result
+
+def update_status(reference, status_value):
+    mycon = connector.connect(
+        host=config.DB_HOST,
+        user=config.DB_USER,
+        password=config.DB_PASSWORD,
+        database=config.DATABASE,
+        port=os.environ["DB_PORT"],
+    ssl_disabled=True
+    )
+    crsr = mycon.cursor()
+    crsr.execute(
+        "UPDATE order_history SET status=%s WHERE reference=%s",
+        (status_value, reference)
+    )
+    mycon.commit()
+    mycon.close()
+
+def get_order(reference):
+    mycon = connector.connect(
+    host=os.environ["DB_HOST"],
+    user=os.environ["DB_USER"],
+    password=os.environ["DB_PASSWORD"],
+    database=os.environ["DATABASE"],
+    port=os.environ["DB_PORT"],
+    ssl_disabled=True
+    )
+    crsr = mycon.cursor()
+    crsr.execute(
+        "SELECT * FROM order_history WHERE reference=%s",
+        (reference,)
+    )
+
+    result = crsr.fetchall()[0][2]
+    mycon.close()
     return result
