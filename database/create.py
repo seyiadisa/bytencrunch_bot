@@ -54,6 +54,15 @@ tables = tables = {
                         FOREIGN KEY (order_id) REFERENCES orders(id)
                         """
 }
+tables["order_history"] = """
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT,
+    order_item VARCHAR(300),
+    amount DECIMAL(15, 2),
+    reference VARCHAR(100),
+    status CHAR(20) DEFAULT 'pending',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+"""
 
 
 def create_database():

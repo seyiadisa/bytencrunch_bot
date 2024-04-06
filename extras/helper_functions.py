@@ -1,5 +1,7 @@
 #random functions to help abstract messy processes
-import openpyxl
+import openpyxl, os
+import requests
+from dotenv.main import load_dotenv
 from datetime import datetime as dt
 from database.queries import (
     get_todays_orders,
@@ -8,6 +10,9 @@ from database.queries import (
 )
 from database.models import Order
 from database.queries import get_user
+
+
+load_dotenv()
 
 def make_excel_file(data):
     wb= openpyxl.Workbook()
@@ -90,4 +95,33 @@ def get_user_profile(user_id):
     #                 """
     return text_to_return
 
+def get_flutterwave_link(reference, amount,email):
+    redirect_url = "maca.com"
+    flutterwave_url = 'https://api.flutterwave.com/v3/payments'
+    secret_key = os.environ["FLUTTERWAVE_SECRET_KEY"]
+    headers = {
+        'Authorization': f'Bearer {secret_key}',
+        'Content-Type': 'application/json',
+    }
+    data = {
+        'tx_ref' : reference,
+        'amount' : amount,
+        'redirect_url' : redirect_url,
+        'customer' : {
+            'email': email,
+        },
+        'customization' : {
+            'title': "BytenCrunch",
+        },
+    }
+    
+    response = requests.post(flutterwave_url, headers=headers, json=data)
+    response.raise_for_status()  # Raise an HTTPError for bad responses
+    flutterwave_response = response.json()
 
+    if flutterwave_response.get('status', False):
+        payment_url = flutterwave_response['data']['link']
+        return payment_url
+    else:
+        print("Failed to get payment url")
+        return {"status": "failed", "error": "Payment initialization failed"}
