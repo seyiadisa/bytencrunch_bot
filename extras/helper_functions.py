@@ -6,15 +6,16 @@ from datetime import datetime as dt
 from database.queries import (
     get_todays_orders,
     get_items_from_order,
-    get_product
+    get_product,
+    get_user
 )
 from database.models import Order
-from database.queries import get_user
+from .my_lists import HALL_LIST
 
 
 load_dotenv()
 
-def make_excel_file(data):
+def make_excel_file(data, hall):
     wb= openpyxl.Workbook()
     worksheet =  wb.active
 
@@ -34,10 +35,11 @@ def make_excel_file(data):
         worksheet.column_dimensions[column].width = adjusted_width
     
     today_date = dt.now().date().isoformat().replace("-","_")
-    wb.save(f"{today_date}.xlsx")
+    wb.save(f"{hall}_{today_date}.xlsx")
+    return f"{hall}_{today_date}.xlsx"
     
 
-def sort_excel_data():
+def sort_excel_data(send_func, update, context):
     orders = get_todays_orders()
     headers = (
         "order_id",
@@ -48,11 +50,17 @@ def sort_excel_data():
         "room",
         "order_details"
     )
-    order_data = (headers,)
-    for order in orders:
-        order_data += order_dict(order) 
+    HALL_DIC = {}
+    for i in HALL_LIST:
+        HALL_DIC[i] = (headers,)
 
-    return order_data
+    for order in orders:
+        order_data = order.get_data_as_tuple()
+        HALL_DIC[order.hall] += order_data
+
+    for hall, data in HALL_DIC.items():
+        file_name = make_excel_file(data, hall)
+        send_func(update, context,file_name)
 
 def order_dict(order:Order):
     order_items = get_items_from_order(order)
