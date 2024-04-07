@@ -5,14 +5,16 @@ from telegram.ext import (
 from telegram import Update
 from dotenv import load_dotenv
 from database import setup
-from handlers import handlers
-
+from handlers import (
+    user_handlers,
+    admin_handlers
+)
 load_dotenv()
 
 def main():
     app = Application.builder().token(os.environ["TELEGRAM_TOKE"]).arbitrary_callback_data(True).build()
         
-    for handler in handlers:
+    for handler in user_handlers:
         app.add_handler(handler)
 
     app.run_polling(allowed_updates=Update.ALL_TYPES)
