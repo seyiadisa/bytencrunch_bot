@@ -48,10 +48,17 @@ UPDATE_USER_PROFILE_KEYBOARD = [
     CANCEL_KEYBOARD
 ]
 
+#Payment Keyboard
 PAYMENT_OPTION_KEYBOARD = [
     [InlineKeyboardButton(text="Yes", callback_data="yes")],
     [InlineKeyboardButton(text="No", callback_data="no")]
 ]
+
+#ADMIN KEYBOARD
+ADMIN_START_KEYBOARD = [
+    [InlineKeyboardButton(text="Get Today's Orders", callback_data="fetch_orders")]
+]
+
 
 def form_keyboard(kybd_btn):
     return InlineKeyboardMarkup(kybd_btn)
