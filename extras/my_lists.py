@@ -6,3 +6,16 @@ UPDATE_COMMAND_LIST = [
     "update_user_room",
     "update_user_all_details"
 ]
+
+HALL_LIST= [
+    "Peter Hall",
+    "Esther Hall",
+    "Joseph Hall", 
+    "Lydia Hall",
+    "Paul Hall",
+    "Mary Hall",
+    "John Hall",
+    "Deborah Hall",
+    "Daniel Hall",
+    "Dorcas Hall"
+]
