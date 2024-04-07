@@ -1,6 +1,10 @@
 import os
 from dotenv import load_dotenv
 import mysql.connector as connector
+from .queries import (
+    get_product, 
+    get_items_from_order
+)
 
 load_dotenv()
 
@@ -70,10 +74,29 @@ class Order:
     hall = None
     room = None
     reference = None #left as none till flutter payment time
-    def __init__(self, my_dic: dict) -> None:
-        self.my_id, self.customer_id, self.ammount_paid, self.payment_status, self.status, self.hall, self.room, self.reference = my_dic.values()
-    def __str__(self) -> str:
+    def __init__(self, my_vals:list) -> None:
+        self.my_id, self.customer_id, self.ammount_paid, self.payment_status, self.status, self.hall, self.room, self.reference = my_vals
+    def _str__(self) -> str:
         return f"Order(id={self.my_id}, customer_id ={self.customer_id}, customer_name={self.customer_name}, ammount_paid={self.ammount_paid}, payment_status={self.payment_status}, status={self.status}, hall={self.hall}, room={self.room}, reference={self.reference})"
+    
+    def get_data_as_tuple(self):
+        order_items = get_items_from_order(self)
+
+        order_details = ""
+        for item in order_items:
+            product = get_product(item.product_id)
+            order_details += f"{item.item_count} order(s) of {product.name} \n"
+
+        result = (
+            self.my_id,
+            self.customer_name,
+            self.ammount_paid,
+            self.status,
+            self.hall,
+            self.room,
+            order_details,
+        )
+        return result
     
     
 
