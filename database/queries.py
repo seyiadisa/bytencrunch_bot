@@ -7,7 +7,7 @@ from .models import (
     OrderItem,
     Product
 )
-import config
+# import config   
 
 load_dotenv()
 
@@ -190,10 +190,10 @@ def get_todays_orders():
 #OrderItems Queries
 def get_all_order_items():
     mycon = connector.connect(
-    host=os.environ["DB_HOST"],
-    user=os.environ["DB_USER"],
-    password=os.environ["DB_PASSWORD"],
-    database=os.environ["DATABASE"]
+        host=os.environ["DB_HOST"],
+        user=os.environ["DB_USER"],
+        password=os.environ["DB_PASSWORD"],
+        database=os.environ["DATABASE"]
     )
     crsr = mycon.cursor()
     crsr.execute(
@@ -206,10 +206,10 @@ def get_all_order_items():
 
 def get_items_from_order(order):
     mycon = connector.connect(
-    host=os.environ["DB_HOST"],
-    user=os.environ["DB_USER"],
-    password=os.environ["DB_PASSWORD"],
-    database=os.environ["DATABASE"]
+        host=os.environ["DB_HOST"],
+        user=os.environ["DB_USER"],
+        password=os.environ["DB_PASSWORD"],
+        database=os.environ["DATABASE"]
     )
     crsr = mycon.cursor()
     crsr.execute(
@@ -222,12 +222,12 @@ def get_items_from_order(order):
 
 def update_status(reference, status_value):
     mycon = connector.connect(
-        host=config.DB_HOST,
-        user=config.DB_USER,
-        password=config.DB_PASSWORD,
-        database=config.DATABASE,
+        host=os.environ["DB_HOST"],
+        user=os.environ["DB_USER"],
+        password=os.environ["DB_PASSWORD"],
+        database=os.environ["DATABASE"],
         port=os.environ["DB_PORT"],
-    ssl_disabled=True
+        ssl_disabled=True
     )
     crsr = mycon.cursor()
     crsr.execute(
@@ -239,12 +239,12 @@ def update_status(reference, status_value):
 
 def get_order(reference):
     mycon = connector.connect(
-    host=os.environ["DB_HOST"],
-    user=os.environ["DB_USER"],
-    password=os.environ["DB_PASSWORD"],
-    database=os.environ["DATABASE"],
-    port=os.environ["DB_PORT"],
-    ssl_disabled=True
+        host=os.environ["DB_HOST"],
+        user=os.environ["DB_USER"],
+        password=os.environ["DB_PASSWORD"],
+        database=os.environ["DATABASE"],
+        port=os.environ["DB_PORT"],
+        ssl_disabled=True
     )
     crsr = mycon.cursor()
     crsr.execute(
