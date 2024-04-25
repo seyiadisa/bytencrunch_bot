@@ -169,6 +169,7 @@ async def finalise(update, context):
             user = context.user_data["user"]
             user.save()
             await home(update, context)
+            return -1
 
         case "reenter_details":
             return BEGIN
@@ -235,7 +236,7 @@ async def home(update, context):
         text="Welcome to ByteNCrunch",
         reply_markup = form_keyboard(HOME_KEYBOARD)
     )
-    return -1
+    return ConversationHandler.END
 
 
 create_account_handler = ConversationHandler(
