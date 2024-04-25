@@ -10,7 +10,7 @@ from handlers import handlers
 load_dotenv()
 
 def main():
-    app = Application.builder().token(os.environ["TELEGRAM_TOKE"]).arbitrary_callback_data(True).build()
+    app = Application.builder().token(os.environ["TELEGRAM_TOKEN"]).arbitrary_callback_data(True).build()
         
     for handler in handlers:
         app.add_handler(handler)
